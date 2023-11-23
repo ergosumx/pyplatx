@@ -3,7 +3,7 @@ This PowerShell script automates the steps required to set up WSL 2 on Windows a
 
 ### Usage
 1. Make sure you are running Windows 10 version 2004 or higher
-2. Download and save the script as enable-wsl2-ubuntu.ps1
+2. Download and save the script as `enable-wsl2-ubuntu.ps1`
 3. Open a PowerShell window as Administrator
 4. Navigate to the script directory
 5. Run the script:
