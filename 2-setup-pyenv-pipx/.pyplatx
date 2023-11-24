@@ -1,0 +1,31 @@
+# .pyplatx - Python environment config file
+
+# List of Python versions to install 
+python_envs:
+  - 3.10.13
+  - 3.11.6
+
+# Global Python version
+global_version: 3.11.6
+
+# Build dependencies
+build_packages:
+  - build-essential 
+  - libssl-dev 
+  - zlib1g-dev
+  - libbz2-dev
+  - libreadline-dev
+  - libsqlite3-dev
+  - curl
+  - libncursesw5-dev
+  - xz-utils
+  - tk-dev
+  - libxml2-dev
+  - libxmlsec1-dev
+  - libffi-dev
+  - liblzma-dev
+
+# Pyenv build settings  
+build_env_vars:
+  PYENV_BUILD_MIRROR_URL: https://pyenv.run
+  PYENV_BUILD_SKIP_MIRROR: 1
