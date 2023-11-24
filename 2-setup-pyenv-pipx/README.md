@@ -1,3 +1,54 @@
+# Python Environment Setup
+
+This repository contains a `setup.sh` script that sets up a Python environment based on a `.pyplatx` configuration file.
+
+## Usage
+To use the setup.sh script, run the following command in your terminal:
+
+```bash
+./setup.sh
+```
+
+This will set up the Python environment based on the .pyplatx configuration file.
+
+## Configuration
+
+The `.pyplatx` configuration file specifies the Python versions to install, the global Python version, the build dependencies, and the `pyenv` build settings. Here's an example:
+
+```yaml
+# .pyplatx - Python environment config file
+
+# List of Python versions to install 
+python_envs:
+  - 3.10.13
+  - 3.11.6
+
+# Global Python version
+global_version: 3.11.6
+
+# Build dependencies
+build_packages:
+  - build-essential 
+  - libssl-dev 
+  - zlib1g-dev
+  - libbz2-dev
+  - libreadline-dev
+  - libsqlite3-dev
+  - curl
+  - libncursesw5-dev
+  - xz-utils
+  - tk-dev
+  - libxml2-dev
+  - libxmlsec1-dev
+  - libffi-dev
+  - liblzma-dev
+
+# Pyenv build settings  
+build_env_vars:
+  PYENV_BUILD_MIRROR_URL: https://pyenv.run
+  PYENV_BUILD_SKIP_MIRROR: 1
+```
+
 ## Testing with Docker
 
 To streamline the testing process and ensure consistent environments, Docker can be employed to run the scripts in isolated containers. Follow the steps below to test the `setup.sh` script using Docker.

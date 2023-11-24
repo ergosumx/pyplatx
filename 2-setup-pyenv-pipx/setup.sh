@@ -22,7 +22,7 @@
 
 # Create Python Environment Manager Tool with Pyenv
 
-config_file="$HOME/.pyplatx"
+config_file="./.pyplatx"
 
 # License prompt
 read -p "Accept MIT License for this tool? (y/n) " choice  
@@ -35,11 +35,18 @@ fi
 
 function pyenv_install() {
 
+  if [ -d "$HOME/.pyenv" ]; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+  fi
+
   if [ -z "$(which pyenv)" ]; then
     curl https://pyenv.run | bash
   fi
 
   pyenv update
+
+  pyenv init -
 
   banner="######### pyenv configured by pyplatx #########"
 
@@ -80,11 +87,56 @@ function install_python_versions() {
   pyenv global $(yq e '.global_version' "$config_file")  
 }
 
-# Install and configure pyenv
+function install_yq() {
+  if ! command -v yq &> /dev/null; then
+    echo "yq could not be found, installing..."
+    sudo wget https://github.com/mikefarah/yq/releases/download/v4.6.3/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
+  fi
+}
+
+function update_and_upgrade() {
+  echo "Updating and upgrading Ubuntu packages..."
+  sudo apt-get update -y && sudo apt-get upgrade -y
+}
+
+function install_pipx() {
+  # Install pip if not already installed
+  if ! command -v pip3 &> /dev/null; then
+    echo "pip3 could not be found, installing..."
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+    sudo python3 get-pip.py
+    rm get-pip.py
+  fi
+
+  # Upgrade pip
+  python3 -m pip install --upgrade pip
+
+  if command -v pipx &> /dev/null; then
+    # Upgrade pipx
+    echo "pipx found, upgrading..."
+    python3 -m pip install --user -U pipx
+  else
+    # Install pipx
+    echo "pipx could not be found, installing..."
+    python3 -m pip install --user pipx
+    python3 -m pipx ensurepath
+  fi
+}
+
+# Update and upgrade Ubuntu packages
+update_and_upgrade
+
+# Install yq
+install_yq
+
+# # Install and configure pyenv
 pyenv_install
 
-# Install build packages
+# # Install build packages
 install_build_packages
 
-# Install python versions
+# # Install python versions
 install_python_versions
+
+# Install pipx
+install_pipx
