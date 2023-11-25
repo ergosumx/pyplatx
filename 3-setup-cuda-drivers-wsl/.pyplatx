@@ -1,0 +1,12 @@
+# .pyplatx - config file
+
+cuda:
+  toolkit:
+    - "11-8"
+    - "12-2"
+  cudnn:
+    - "./nvidia/cudnn/ubuntu2204-8.9.5.30_11-8_amd64.deb"
+    - "./nvidia/cudnn/ubuntu2204-8.9.5.30-12-2_amd64.deb"
+  active:
+    toolkit: "11-8"
+    cudnn: "./nvidia/cudnn/ubuntu2204-8.9.5.30_11-8_amd64.deb"
