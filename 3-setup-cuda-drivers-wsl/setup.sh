@@ -52,9 +52,9 @@ function install_cuda {
         sudo apt install -y cuda-$tk
     done
     
-    for cudnn in "${CUDNNS[@]}"; do
-        sudo apt install -y libcudnn8=$cudnn-1+cuda${tk} 
-    done
+    # for cudnn in "${CUDNNS[@]}"; do
+    #     sudo apt install -y libcudnn8=$cudnn 
+    # done
 }
 
 function configure_cuda {
@@ -76,7 +76,7 @@ function nvidia_add_update_and_upgrade() {
     wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
     sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
     sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/3bf863cc.pub
-    sudo add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /"
+    sudo add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /" -y
 
     sudo apt-get update -y && sudo apt-get upgrade -y
 }
@@ -85,7 +85,32 @@ function update_and_upgrade() {
     echo "Updating and upgrading Ubuntu packages..."
     sudo apt-get update -y && sudo apt-get upgrade -y
 
-    sudo apt-get install software-properties-common -y
+    sudo apt-get install software-properties-common ubuntu-drivers-common -y
+}
+
+function install_nvidia_drivers() {
+
+  # Detect GPU/driver
+  GPU="$(lspci | grep -i nvidia)"
+  DRIVER="$(uname -r | cut -d- -f3)"
+
+  # Install dependencies
+  sudo apt update
+  sudo apt install -y build-essential dkms
+
+  # Install driver
+  sudo ubuntu-drivers autoinstall
+  sudo reboot
+
+  # Validate
+  nvidia-smi
+
+  if [ $? -ne 0 ]; then
+    echo "Failed to install NVIDIA driver. GPU: ${GPU}. Kernel driver: ${DRIVER}" 
+    exit 1
+  fi
+
+  echo "NVIDIA driver installed successfully!"
 }
 
 # Update and upgrade Ubuntu packages
@@ -100,7 +125,10 @@ install_yq
 # Main driver
 parse_config $CONFIG_FILE
 install_cuda
-configure_cuda 
+# configure_cuda 
+
+# Install nvidia drivers
+install_nvidia_drivers
 
 # Validate
 nvidia-smi  
