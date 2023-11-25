@@ -52,9 +52,9 @@ function install_cuda {
         sudo apt install -y cuda-$tk
     done
     
-    # for cudnn in "${CUDNNS[@]}"; do
-    #     sudo apt install -y libcudnn8=$cudnn 
-    # done
+    for cudnn in "${CUDNNS[@]}"; do
+        sudo apt install -y libcudnn8=$cudnn 
+    done
 }
 
 function configure_cuda {
