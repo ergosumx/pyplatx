@@ -1,0 +1,12 @@
+# .pyplatx - config file
+
+cuda:
+  toolkit:
+    - "11.8"
+    - "12.1"
+  cudnn:
+    - "8.7"
+    - "8.2"
+  active:
+    - "toolkit:11.8"
+    - "cudnn:8.7"
